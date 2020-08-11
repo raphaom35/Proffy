@@ -1,0 +1,16 @@
+import { Request, Response } from "express";
+import db from "../database/connection";
+export default class ConnectionsControles {
+  async index(request: Request, response: Response) {
+    const totalConnetions = await db("connections").count("* as total");
+    const { total } = totalConnetions[0];
+    return response.json({ total });
+  }
+  async create(request: Request, response: Response) {
+    const { user_id } = request.body;
+    await db("connections").insert({
+      user_id,
+    });
+    return response.status(201).send();
+  }
+}
